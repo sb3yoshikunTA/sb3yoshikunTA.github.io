@@ -7,3 +7,7 @@ img.headerlogo {
   width:175px;
   height:75px;
 }
+.main {
+  background-color:#fefefe;
+  font-family:"sans-serif";
+}
