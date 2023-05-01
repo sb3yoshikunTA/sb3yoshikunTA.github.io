@@ -1,6 +1,3 @@
-html {
-  font-family:"Arial";
-}
 .header {
   background-color:#DEDEff;
   width:1000px;
@@ -12,4 +9,8 @@ img.headerlogo {
 }
 .main {
   background-color:#fefefe;
+  font-family:"Arial";
+}
+.welcome {
+  font-family:"Arial";
 }
