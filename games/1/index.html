@@ -1,0 +1,128 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ピンポンゲーム - よしくんてぃーえーのホームページ</title>
+  </head>
+  <body>
+    <script>
+      // HTMLの要素を取得する
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+    
+      // ボール、パドル、スコアの初期値を設定する
+      let x = canvas.width / 2;
+      let y = canvas.height - 30;
+      let dx = 2;
+      let dy = -2;
+      const ballRadius = 10;
+      
+      let paddleHeight = 10;
+      let paddleWidth = 75;
+      let paddleX = (canvas.width - paddleWidth) / 5;
+      let rightPressed = false;
+      let leftPressed = false;
+      
+      let score = 0;
+        
+      // キーボードイベントを処理する
+      document.addEventListener("keydown", keyDownHandler, false);
+      document.addEventListener("keyup", keyUpHandler, false);
+      
+      function keyDownHandler(e) {
+        if (e.key == "Right" || e.key == "ArrowRight") {
+          rightPressed = true;
+        } else if (e.key == "Left" || e.key == "ArrowLeft") {
+          leftPressed = true;
+        }
+      }
+      
+      function keyUpHandler(e) {
+        if (e.key == "Right" || e.key == "ArrowRight") {
+          rightPressed = false; 
+        } else if (e.key == "Left" || e.key == "ArrowLeft") {
+          leftPressed = false;
+        }
+      }
+      
+      // ボールとパドルの衝突を検出する
+      function collisionDetection() {
+        if (
+          x > paddleX &&
+          x < paddleX + paddleWidth &&
+          y + ballRadius > canvas.height - paddleHeight
+        ) {
+          dy = -dy;
+          score++;
+        }
+      }
+  
+      // ボールを描画する
+      function drawBall() {
+        ctx.beginPath();
+        ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+      }
+      
+     // パドルを描画する
+      function drawPaddle() {
+        ctx.beginPath();
+        ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+      }
+    
+      // スコアを描画する
+      function drawScore() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "#0095DD";
+        ctx.fillText("Score: " + score, 8, 20);
+      }
+    
+      // ゲームループ
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        collisionDetection();
+        drawBall();
+        drawPaddle();
+        drawScore();
+        
+        // パドルが端に達した場合は移動を停止する
+        if (paddleX < 0) {
+          paddleX = 0;
+        } else if (paddleX > canvas.width - paddleWidth) {
+          paddleX = canvas.width - paddleWidth;
+        }
+        
+        // ボールが壁に衝突した場合は反射させる
+        if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+          dx = -dx;
+        }
+        if (y + dy < ballRadius) {
+          dy = -dy;
+        } else if (y + dy > canvas.height - ballRadius) {
+          if (x > paddleX && x < paddleX + paddleWidth) {
+            dy = -dy;
+          } else {
+            alert("GAME OVER");
+            document.location.reload();
+          }
+        }
+        
+        // パドルを移動させる
+        if (rightPressed) {
+          paddleX += 7;
+        } else if (leftPressed) {
+          paddleX -= 7;
+        }
+        
+        x += dx;
+        y += dy;
+      }
+    </script>
+  </body>
+</html>
